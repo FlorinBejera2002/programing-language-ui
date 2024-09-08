@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { useRouter } from 'next/router'
+import { useNavigate } from 'react-router-dom'
 import { ProgrammingLanguage, createLanguage } from '../api/programing-language'
-import { Button } from '@/shadcn/components/ui/button'
-import { Input } from '@/shadcn/components/ui/input'
+import { Button } from '../shadcn/components/ui/button'
+import { Input } from '../shadcn/components/ui/input'
 
 export default function AddLanguage({ token }: { token: string }) {
   const [newLanguage, setNewLanguage] = useState<ProgrammingLanguage>({
@@ -13,11 +13,11 @@ export default function AddLanguage({ token }: { token: string }) {
     paradigm: 'object-oriented',
     popularity: 0
   })
-  const router = useRouter()
+  const navigate = useNavigate()
 
   const handleSubmit = async () => {
     await createLanguage(newLanguage, token)
-    router.push('/')
+    navigate('/home')
   }
 
   return (

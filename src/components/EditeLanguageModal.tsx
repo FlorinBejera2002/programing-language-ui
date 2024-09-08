@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { ProgrammingLanguage, updateLanguage } from '../api/programing-language'
-import { Button } from '@/shadcn/components/ui/button'
-import { Input } from '@/shadcn/components/ui/input'
+import { Button } from '../shadcn/components/ui/button'
+import { Input } from '../shadcn/components/ui/input'
 import {
   Dialog,
   DialogContent,
   DialogHeader
-} from '@/shadcn/components/ui/dialog'
+} from '../shadcn/components/ui/dialog'
 
 export default function EditLanguageModal({
   language,

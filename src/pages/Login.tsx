@@ -1,8 +1,8 @@
 import React, { useState, FormEvent } from 'react'
-import { useRouter } from 'next/router'
+import { useNavigate } from 'react-router-dom'
 import { loginUser } from '../api/programing-language'
-import { Button } from '@/shadcn/components/ui/button'
-import { Input } from '@/shadcn/components/ui/input'
+import { Button } from '../shadcn/components/ui/button'
+import { Input } from '../shadcn/components/ui/input'
 
 export default function LoginPage({
   onLogin
@@ -10,7 +10,7 @@ export default function LoginPage({
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const router = useRouter()
+  const navigate = useNavigate()
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault() // Previne reîncărcarea paginii la submit
@@ -18,7 +18,7 @@ export default function LoginPage({
       const response = await loginUser({ username, password })
       localStorage.setItem('token', response.user.token)
       onLogin(response.user.token) // Actualizează starea de autentificare
-      router.push('/')
+      navigate('/')
     } catch (error) {
       setError('Invalid credentials. Please try again.')
       console.error('Failed to login:', error)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
+import { useNavigate, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import LanguageList from './pages/LanguageTable'
 import Login from './pages/Login'
@@ -9,7 +9,8 @@ import AddLanguage from './pages/AddLanguage'
 export function App() {
   const [token, setToken] = useState<null | string>(null)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
-  const router = useRouter()
+  const navigate = useNavigate()
+  const location = useLocation() // Folosim useLocation pentru a obține pathname-ul curent
 
   // Verifică dacă există un token în localStorage la montarea componentei
   useEffect(() => {
@@ -17,38 +18,42 @@ export function App() {
     if (storedToken) {
       setToken(storedToken)
       setIsAuthenticated(true)
+    } else {
+      navigate('/login')
     }
-  }, [])
+  }, [navigate])
 
   const handleLogin = (token: string) => {
     localStorage.setItem('token', token)
     setToken(token)
     setIsAuthenticated(true)
-    router.push('/')
+    navigate('/')
   }
 
   const handleLogout = () => {
     localStorage.removeItem('token')
     setToken(null)
     setIsAuthenticated(false)
-    router.push('/login')
+    navigate('/login')
   }
 
   // Verifică dacă utilizatorul este autentificat și redirecționează
   useEffect(() => {
-    if (!isAuthenticated && router.pathname !== '/login') {
-      router.push('/login')
+    if (!isAuthenticated && location.pathname !== '/login') {
+      navigate('/login')
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, navigate, location.pathname])
 
   return (
     <div className="h-full">
       {isAuthenticated && <Navbar onLogout={handleLogout} />}
       {isAuthenticated ? (
         <>
-          {router.pathname === '/' && <LanguageList token={token!} />}
-          {router.pathname === '/newLanguage' && <AddLanguage token={token!} />}
-          {router.pathname.startsWith('/language/') && <LanguageDetail />}
+          {location.pathname === '/' && <LanguageList token={token!} />}
+          {location.pathname === '/newLanguage' && (
+            <AddLanguage token={token!} />
+          )}
+          {location.pathname.startsWith('/language/') && <LanguageDetail />}
         </>
       ) : (
         <Login onLogin={handleLogin} />

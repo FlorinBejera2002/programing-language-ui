@@ -3,9 +3,9 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader
-} from '@/shadcn/components/ui/dialog'
+} from '../shadcn/components/ui/dialog'
 import { ProgrammingLanguage } from '../api/programing-language'
-import { Button } from '@/shadcn/components/ui/button'
+import { Button } from '../shadcn/components/ui/button'
 
 export default function LanguageDetail({
   language,

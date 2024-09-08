@@ -23,21 +23,9 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": "src",
     "paths": {
-      "@/pages/*": [
-        "./pages/*"
-      ],
-      "@/shadcn/components/*": [
-        "./shadcn/components/*"
-      ],
-      "@/api/*": [
-        "./api/*"
-      ],
-      "@/components/*": [
-        "./components/*"
-      ],
-      "@/*": [
-        "./*"
-      ]
+      "@/components/*": ["./components/*"],
+      "@/shadcn/components/*": ["./shadcn/components/*"],
+      "@/shadcn/lib/*": ["./shadcn/lib/*"]
     },
     "allowJs": true,
     "incremental": true,
