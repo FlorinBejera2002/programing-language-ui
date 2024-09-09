@@ -14,11 +14,12 @@ export default function LoginPage({
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault() // Previne reîncărcarea paginii la submit
+
     try {
-      const response = await loginUser({ username, password })
-      localStorage.setItem('token', response.user.token)
+      const response = await loginUser(username, password) // Apelează funcția loginUser cu username și password
+      localStorage.setItem('token', response.user.token) // Stochează token-ul primit de la server
       onLogin(response.user.token) // Actualizează starea de autentificare
-      navigate('/')
+      navigate('/') // Redirecționează utilizatorul după login
     } catch (error) {
       setError('Invalid credentials. Please try again.')
       console.error('Failed to login:', error)

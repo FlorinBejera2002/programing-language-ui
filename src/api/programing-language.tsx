@@ -25,17 +25,21 @@ export interface LoginResponse {
   message: string
 }
 
-export async function loginUser(data: LoginInput): Promise<LoginResponse> {
+export async function loginUser(
+  username: string,
+  password: string
+): Promise<LoginResponse> {
   const res = await fetch(`${API_URL}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify({ username, password })
   })
 
   if (!res.ok) {
-    throw new Error('Invalid credentials')
+    const errorMessage = await res.text() // Obține mesajul de eroare de la server
+    throw new Error(errorMessage || 'Invalid credentials')
   }
 
   return res.json()
@@ -55,9 +59,15 @@ export async function fetchLanguages(
 ): Promise<ProgrammingLanguage[]> {
   const res = await fetch(`${API_URL}/programming-languages`, {
     headers: {
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}` // Trimite token-ul în format Bearer
     }
   })
+
+  if (!res.ok) {
+    const errorMessage = await res.text()
+    throw new Error(errorMessage || 'Failed to fetch languages')
+  }
+
   return res.json()
 }
 
@@ -69,10 +79,16 @@ export async function createLanguage(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}` // Trimite token-ul în format Bearer
     },
     body: JSON.stringify(language)
   })
+
+  if (!res.ok) {
+    const errorMessage = await res.text()
+    throw new Error(errorMessage || 'Failed to create language')
+  }
+
   return res.json()
 }
 
@@ -85,18 +101,29 @@ export async function updateLanguage(
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}` // Trimite token-ul în format Bearer
     },
     body: JSON.stringify(language)
   })
+
+  if (!res.ok) {
+    const errorMessage = await res.text()
+    throw new Error(errorMessage || 'Failed to update language')
+  }
+
   return res.json()
 }
 
 export async function deleteLanguage(id: string, token: string): Promise<void> {
-  await fetch(`${API_URL}/programming-languages/${id}`, {
+  const res = await fetch(`${API_URL}/programming-languages/${id}`, {
     method: 'DELETE',
     headers: {
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}` // Trimite token-ul în format Bearer
     }
   })
+
+  if (!res.ok) {
+    const errorMessage = await res.text()
+    throw new Error(errorMessage || 'Failed to delete language')
+  }
 }
