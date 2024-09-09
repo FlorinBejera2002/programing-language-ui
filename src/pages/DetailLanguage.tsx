@@ -26,7 +26,7 @@ export default function LanguageDetail({ token }: { token: string }) {
     if (id) {
       const fetchDetails = async () => {
         try {
-          const languageDetails = await fetchLanguageById(id as string, token)
+          const languageDetails = await fetchLanguageById(id, token)
           setLanguage(languageDetails)
         } catch (error) {
           console.error('Failed to fetch language details:', error)

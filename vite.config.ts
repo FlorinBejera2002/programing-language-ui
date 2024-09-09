@@ -9,12 +9,5 @@ export default defineConfig({
     },
   },
   server: {
-    proxy: {
-      '/api': {
-        target: 'http://164.90.166.249:3001', // URL-ul backend-ului tău
-        changeOrigin: true,  // Schimbă originea cererii pentru a evita problemele CORS
-        rewrite: (path) => path.replace(/^\/api/, ''), // Rescrie calea cererii pentru a elimina prefixul "/api"
-      },
-    }
-  }
-});
+    port: 9000, 
+  },});

@@ -1,13 +1,6 @@
-const API_URL = '/api' // Prefixează cererile cu /api
+import { IProgrammingLanguage } from 'types'
 
-export interface ProgrammingLanguage {
-  id: string
-  name: string
-  creator: string
-  releaseYear: number
-  paradigm: 'object-oriented' | 'functional' | 'procedural' | 'declarative'
-  popularity: number
-}
+const API_URL = 'http://164.90.166.249:3001' // Prefixează cererile cu /api
 
 export interface User {
   id: number
@@ -23,13 +16,14 @@ export interface LoginInput {
 export interface LoginResponse {
   user: User
   message: string
+  token: string
 }
 
 export async function loginUser(
   username: string,
   password: string
 ): Promise<LoginResponse> {
-  const res = await fetch(`${API_URL}/login`, {
+  const res = await fetch('http://164.90.166.249:3001/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -38,11 +32,13 @@ export async function loginUser(
   })
 
   if (!res.ok) {
-    const errorMessage = await res.text() // Obține mesajul de eroare de la server
-    throw new Error(errorMessage || 'Invalid credentials')
+    throw new Error('Login failed')
   }
 
-  return res.json()
+  const data = await res.json() // Parsează răspunsul JSON
+  console.log('Raw response:', data) // Verifică ce primești de la server
+
+  return data
 }
 
 export async function logoutUser(token: string): Promise<void> {
@@ -56,10 +52,10 @@ export async function logoutUser(token: string): Promise<void> {
 
 export async function fetchLanguages(
   token: string
-): Promise<ProgrammingLanguage[]> {
+): Promise<IProgrammingLanguage[]> {
   const res = await fetch(`${API_URL}/programming-languages`, {
     headers: {
-      Authorization: `Bearer ${token}` // Trimite token-ul în format Bearer
+      Authorization: `Bearer ${token}`
     }
   })
 
@@ -86,10 +82,10 @@ export async function fetchLanguageById(id: string, token: string) {
   return res.json()
 }
 
-export async function createLanguage(
-  language: ProgrammingLanguage,
+export async function fetchNewLanguage(
+  language: IProgrammingLanguage,
   token: string
-): Promise<ProgrammingLanguage> {
+): Promise<IProgrammingLanguage> {
   const res = await fetch(`${API_URL}/programming-languages`, {
     method: 'POST',
     headers: {
@@ -109,9 +105,9 @@ export async function createLanguage(
 
 export async function updateLanguage(
   id: string,
-  language: ProgrammingLanguage,
+  language: IProgrammingLanguage,
   token: string
-): Promise<ProgrammingLanguage> {
+): Promise<IProgrammingLanguage> {
   const res = await fetch(`${API_URL}/programming-languages/${id}`, {
     method: 'PUT',
     headers: {

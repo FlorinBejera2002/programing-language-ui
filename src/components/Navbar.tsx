@@ -4,10 +4,10 @@ export default function Navbar({ onLogout }: { onLogout: () => void }) {
   const navigate = useNavigate()
 
   return (
-    <nav className="bg-blue-500 p-4 flex justify-between">
+    <nav className="  p-4 flex justify-between">
       <div>
         <Button onClick={() => navigate('/')}>Home</Button>
-        <Button onClick={() => navigate('/newLanguage')}>Add Language</Button>
+        <Button onClick={() => navigate('/new-language')}>Add Language</Button>
       </div>
       <Button onClick={onLogout} className="bg-red-500">
         Logout

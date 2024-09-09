@@ -1,15 +1,11 @@
 import { useState, useEffect } from 'react'
-import {
-  ProgrammingLanguage,
-  fetchLanguages,
-  deleteLanguage
-} from '../api/programing-language'
-import EditLanguageModal from '../components/EditeLanguageModal'
+import { fetchLanguages, deleteLanguage } from '../api/programing-language'
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
+  TableHeader,
   TableRow
 } from '@/shadcn/components/ui/table'
 import { Button } from '@/shadcn/components/ui/button'
@@ -19,13 +15,16 @@ import {
   DialogHeader
 } from '@/shadcn/components/ui/dialog'
 import { useNavigate } from 'react-router-dom'
+import { IdCard } from 'lucide-react'
+import { Input } from '@/shadcn/components/ui/input'
+import { IProgrammingLanguage } from 'types'
 
 export default function LanguageList({ token }: { token: string }) {
-  const [languages, setLanguages] = useState<ProgrammingLanguage[]>([])
-  const [editLanguageId, setEditLanguageId] = useState<string | null>(null)
+  const [languages, setLanguages] = useState<IProgrammingLanguage[]>([])
   const [deleteLanguageId, setDeleteLanguageId] = useState<string | null>(null)
   const navigate = useNavigate()
 
+  // Fetch the languages on component mount
   useEffect(() => {
     const loadLanguages = async () => {
       const langs = await fetchLanguages(token)
@@ -34,36 +33,51 @@ export default function LanguageList({ token }: { token: string }) {
     loadLanguages()
   }, [token])
 
+  // Delete language and update state
   const handleDelete = async (id: string) => {
     await deleteLanguage(id, token)
     setLanguages(languages.filter((lang) => lang.id !== id))
     setDeleteLanguageId(null)
   }
 
+  // Handle row click to navigate to the details
   const handleRowClick = (id: string) => {
-    navigate(`/?action=quick-view&id=${id}`)
+    navigate(`?action=edit&id=${id}`)
   }
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Programming Languages</h1>
-      <Table>
-        <TableHead>
+    <div className="flex flex-col max-w-6xl mx-auto justify-center items-center h-screen">
+      <div className="flex justify-between items-center pb-4 w-full">
+        <Input placeholder="Search..." className="w-fit" />
+        <Button className="hidden">hidden</Button> {/* Am ascuns butonul */}
+      </div>
+
+      <Table className="border rounded-md w-full">
+        <TableHeader>
           <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Creator</TableCell>
-            <TableCell>Actions</TableCell>
+            <TableHead>
+              <IdCard className="w-6 h-6" />
+            </TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Creator</TableHead>
+            <TableHead></TableHead>
           </TableRow>
-        </TableHead>
+        </TableHeader>
+
         <TableBody>
           {languages.map((lang) => (
-            <TableRow key={lang.id} onClick={() => handleRowClick(lang.id)}>
+            <TableRow
+              key={lang.id}
+              className="cursor-pointer"
+              onClick={() => handleRowClick(lang.id)}
+            >
               <TableCell>{lang.id}</TableCell>
               <TableCell>{lang.name}</TableCell>
               <TableCell>{lang.creator}</TableCell>
-              <TableCell>
-                <Button onClick={() => setEditLanguageId(lang.id)}>Edit</Button>
+              <TableCell className="flex justify-end gap-2">
+                <Button onClick={() => navigate(`/edit/${lang.id}`)}>
+                  Edit
+                </Button>
                 <Button onClick={() => setDeleteLanguageId(lang.id)}>
                   Delete
                 </Button>
@@ -73,26 +87,9 @@ export default function LanguageList({ token }: { token: string }) {
         </TableBody>
       </Table>
 
-      {/* Modale pentru Editare */}
-      {editLanguageId && (
-        <EditLanguageModal
-          language={languages.find((lang) => lang.id === editLanguageId)!}
-          token={token}
-          onClose={() => setEditLanguageId(null)}
-          onUpdate={(updatedLang) => {
-            setLanguages((prev) =>
-              prev.map((lang) =>
-                lang.id === updatedLang.id ? updatedLang : lang
-              )
-            )
-            setEditLanguageId(null)
-          }}
-        />
-      )}
-
-      {/* Modale pentru Ștergere */}
+      {/* Dialog pentru confirmare ștergere */}
       {deleteLanguageId && (
-        <Dialog open={true}>
+        <Dialog open={true} onOpenChange={() => setDeleteLanguageId(null)}>
           <DialogHeader>Delete Language</DialogHeader>
           <DialogContent>
             Are you sure you want to delete this language?

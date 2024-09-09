@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import LanguageTable from './pages/LanguageTable'
-import Login from './pages/Login'
+import { LoginPage } from './pages/Login'
 import LanguageDetail from './pages/DetailLanguage'
-import AddLanguage from './pages/AddLanguage'
+import EditLanguageModal from './components/EditeLanguageModal'
+import { AddLanguage } from './pages/AddLanguage'
 
 export function App() {
   const [token, setToken] = useState<null | string>(null)
@@ -22,10 +23,14 @@ export function App() {
   }, [navigate])
 
   const handleLogin = (token: string) => {
-    localStorage.setItem('token', token)
-    setToken(token)
-    setIsAuthenticated(true)
-    navigate('/')
+    try {
+      localStorage.setItem('token', token)
+      setToken(token)
+      setIsAuthenticated(true)
+      navigate('/')
+    } catch (error) {
+      console.error('Failed to set token:', error)
+    }
   }
 
   const handleLogout = () => {
@@ -43,14 +48,18 @@ export function App() {
           <Routes>
             <Route path="/" element={<LanguageTable token={token!} />} />
             <Route
-              path="/newLanguage"
+              path="/new-language"
               element={<AddLanguage token={token!} />}
+            />
+            <Route
+              path="/edite/:id"
+              element={<EditLanguageModal token={token!} />}
             />
           </Routes>
           <LanguageDetail token={token!} />
         </>
       ) : (
-        <Login onLogin={handleLogin} />
+        <LoginPage onLogin={handleLogin} />
       )}
     </div>
   )
