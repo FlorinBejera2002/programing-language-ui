@@ -33,14 +33,12 @@ export default function LanguageList({ token }: { token: string }) {
     loadLanguages()
   }, [token])
 
-  // Delete language and update state
   const handleDelete = async (id: string) => {
     await deleteLanguage(id, token)
     setLanguages(languages.filter((lang) => lang.id !== id))
     setDeleteLanguageId(null)
   }
 
-  // Handle row click to navigate to the details
   const handleRowClick = (id: string) => {
     navigate(`?action=edit&id=${id}`)
   }
@@ -49,7 +47,7 @@ export default function LanguageList({ token }: { token: string }) {
     <div className="flex flex-col max-w-6xl mx-auto justify-center items-center h-screen">
       <div className="flex justify-between items-center pb-4 w-full">
         <Input placeholder="Search..." className="w-fit" />
-        <Button className="hidden">hidden</Button> {/* Am ascuns butonul */}
+        <Button className="">hidden</Button>
       </div>
 
       <Table className="border rounded-md w-full">
@@ -66,14 +64,16 @@ export default function LanguageList({ token }: { token: string }) {
 
         <TableBody>
           {languages.map((lang) => (
-            <TableRow
-              key={lang.id}
-              className="cursor-pointer"
-              onClick={() => handleRowClick(lang.id)}
-            >
-              <TableCell>{lang.id}</TableCell>
-              <TableCell>{lang.name}</TableCell>
-              <TableCell>{lang.creator}</TableCell>
+            <TableRow key={lang.id} className="cursor-pointer">
+              <TableCell onClick={() => handleRowClick(lang.id)}>
+                {lang.id}
+              </TableCell>
+              <TableCell onClick={() => handleRowClick(lang.id)}>
+                {lang.name}
+              </TableCell>
+              <TableCell onClick={() => handleRowClick(lang.id)}>
+                {lang.creator}
+              </TableCell>
               <TableCell className="flex justify-end gap-2">
                 <Button onClick={() => navigate(`/edit/${lang.id}`)}>
                   Edit
