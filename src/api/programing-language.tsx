@@ -1,4 +1,4 @@
-const API_URL = 'http://164.90.166.249:3001'
+const API_URL = '/api' // Prefixează cererile cu /api
 
 export interface ProgrammingLanguage {
   id: string
@@ -66,6 +66,21 @@ export async function fetchLanguages(
   if (!res.ok) {
     const errorMessage = await res.text()
     throw new Error(errorMessage || 'Failed to fetch languages')
+  }
+
+  return res.json()
+}
+
+export async function fetchLanguageById(id: string, token: string) {
+  const res = await fetch(`${API_URL}/programming-languages/${id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch language details')
   }
 
   return res.json()

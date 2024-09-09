@@ -8,4 +8,13 @@ export default defineConfig({
       '@': '/src', // Verifică că aliasul indică spre folderul src sau alt folder relevant
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://164.90.166.249:3001', // URL-ul backend-ului tău
+        changeOrigin: true,  // Schimbă originea cererii pentru a evita problemele CORS
+        rewrite: (path) => path.replace(/^\/api/, ''), // Rescrie calea cererii pentru a elimina prefixul "/api"
+      },
+    }
+  }
 });

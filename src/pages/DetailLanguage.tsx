@@ -1,42 +1,79 @@
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader
-} from '../shadcn/components/ui/dialog'
-import { ProgrammingLanguage } from '../api/programing-language'
-import { Button } from '../shadcn/components/ui/button'
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle
+} from '../shadcn/components/ui/sheet'
+import {
+  Code,
+  IdCard,
+  UserPlus,
+  CalendarDays,
+  Code2,
+  Layers
+} from 'lucide-react'
+import { Card } from '@/shadcn/components/ui/card'
+import { useSearchParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { fetchLanguageById } from '../api/programing-language'
 
-export default function LanguageDetail({
-  language,
-  onClose
-}: {
-  language?: ProgrammingLanguage
-  onClose?: () => void
-}) {
+export default function LanguageDetail({ token }: { token: string }) {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const id = searchParams.get('id')
+  const [language, setLanguage] = useState<any | null>(null)
+
+  useEffect(() => {
+    if (id) {
+      const fetchDetails = async () => {
+        try {
+          const languageDetails = await fetchLanguageById(id as string, token)
+          setLanguage(languageDetails)
+        } catch (error) {
+          console.error('Failed to fetch language details:', error)
+        }
+      }
+      fetchDetails()
+    }
+  }, [id, token])
+
+  const handleClose = () => {
+    setSearchParams({})
+  }
+
   return (
-    <Dialog show={true} onClose={onClose}>
-      <DialogHeader>Language Details</DialogHeader>
-      <DialogContent>
-        <p>
-          <strong>ID:</strong> {language!.id}
-        </p>
-        <p>
-          <strong>Name:</strong> {language!.name}
-        </p>
-        <p>
-          <strong>Creator:</strong> {language!.creator}
-        </p>
-        <p>
-          <strong>Release Year:</strong> {language!.releaseYear}
-        </p>
-        <p>
-          <strong>Paradigm:</strong> {language!.paradigm}
-        </p>
-      </DialogContent>
-      <DialogFooter>
-        <Button onClick={onClose}>Close</Button>
-      </DialogFooter>
-    </Dialog>
+    <Sheet open={!!id} onOpenChange={handleClose}>
+      <SheetContent className="bg-white p-6 rounded-tl-md rounded-bl-md gap-5 flex flex-col">
+        <SheetHeader>
+          <SheetTitle className="flex items-center gap-2">
+            <Code className="w-6 h-6 mr-2" />
+            Details
+          </SheetTitle>
+        </SheetHeader>
+        {language && (
+          <Card className="flex flex-col gap-2 p-3">
+            <div className="flex items-center gap-2">
+              <IdCard className="w-4 h-4" />
+              {language.id}
+            </div>
+            <div className="flex items-center gap-2">
+              <Code2 className="w-4 h-4" />
+              {language.name}
+            </div>
+            <div className="flex items-center gap-2">
+              <UserPlus className="w-4 h-4" />
+              {language.creator}
+            </div>
+            <div className="flex items-center gap-2">
+              <CalendarDays className="w-4 h-4" />
+              {language.releaseYear}
+            </div>
+            <div className="flex items-center gap-2">
+              <Layers className="w-4 h-4" />
+              {language.paradigm}
+            </div>
+          </Card>
+        )}
+      </SheetContent>
+    </Sheet>
   )
 }

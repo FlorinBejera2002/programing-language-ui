@@ -31,9 +31,9 @@ export default function EditLanguageModal({
   }
 
   return (
-    <Dialog onClose={onClose} show={true}>
-      <DialogHeader>Edit Language</DialogHeader>
-      <DialogContent>
+    <Dialog open={false}>
+      <DialogContent className="flex flex-col gap-4 bg-white p-6 rounded-lg">
+        <DialogHeader>Edit Language</DialogHeader>
         <Input
           value={updatedLanguage.name}
           onChange={(e: any) =>

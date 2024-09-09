@@ -18,14 +18,13 @@ import {
   DialogContent,
   DialogHeader
 } from '@/shadcn/components/ui/dialog'
-import LanguageDetail from './DetailLanguage'
+import { useNavigate } from 'react-router-dom'
 
 export default function LanguageList({ token }: { token: string }) {
   const [languages, setLanguages] = useState<ProgrammingLanguage[]>([])
   const [editLanguageId, setEditLanguageId] = useState<string | null>(null)
   const [deleteLanguageId, setDeleteLanguageId] = useState<string | null>(null)
-  const [selectedLanguage, setSelectedLanguage] =
-    useState<ProgrammingLanguage | null>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const loadLanguages = async () => {
@@ -39,6 +38,10 @@ export default function LanguageList({ token }: { token: string }) {
     await deleteLanguage(id, token)
     setLanguages(languages.filter((lang) => lang.id !== id))
     setDeleteLanguageId(null)
+  }
+
+  const handleRowClick = (id: string) => {
+    navigate(`/?action=quick-view&id=${id}`)
   }
 
   return (
@@ -55,14 +58,11 @@ export default function LanguageList({ token }: { token: string }) {
         </TableHead>
         <TableBody>
           {languages.map((lang) => (
-            <TableRow key={lang.id}>
+            <TableRow key={lang.id} onClick={() => handleRowClick(lang.id)}>
               <TableCell>{lang.id}</TableCell>
               <TableCell>{lang.name}</TableCell>
               <TableCell>{lang.creator}</TableCell>
               <TableCell>
-                <Button onClick={() => setSelectedLanguage(lang)}>
-                  Details
-                </Button>
                 <Button onClick={() => setEditLanguageId(lang.id)}>Edit</Button>
                 <Button onClick={() => setDeleteLanguageId(lang.id)}>
                   Delete
@@ -73,13 +73,6 @@ export default function LanguageList({ token }: { token: string }) {
         </TableBody>
       </Table>
 
-      {/* Modale pentru Detalii */}
-      {selectedLanguage && (
-        <LanguageDetail
-          language={selectedLanguage}
-          onClose={() => setSelectedLanguage(null)}
-        />
-      )}
       {/* Modale pentru Editare */}
       {editLanguageId && (
         <EditLanguageModal
@@ -99,7 +92,7 @@ export default function LanguageList({ token }: { token: string }) {
 
       {/* Modale pentru Ștergere */}
       {deleteLanguageId && (
-        <Dialog onClose={() => setDeleteLanguageId(null)} show={true}>
+        <Dialog open={true}>
           <DialogHeader>Delete Language</DialogHeader>
           <DialogContent>
             Are you sure you want to delete this language?
