@@ -1,4 +1,4 @@
-import { IProgrammingLanguage } from 'types'
+import { IProgrammingLanguage, IProgrammingParadigm } from '../types'
 
 const API_URL = 'http://164.90.166.249:3001' // Prefixează cererile cu /api
 
@@ -105,7 +105,14 @@ export async function fetchNewLanguage(
 
 export async function updateLanguage(
   id: string,
-  language: IProgrammingLanguage,
+  language: {
+    name: string
+    creator: string
+    releaseYear: number
+    paradigm: IProgrammingParadigm
+    popularity: number
+  },
+
   token: string
 ): Promise<IProgrammingLanguage> {
   const res = await fetch(`${API_URL}/programming-languages/${id}`, {
