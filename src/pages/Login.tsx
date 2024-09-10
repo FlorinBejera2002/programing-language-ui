@@ -18,16 +18,15 @@ export const LoginPage: React.FC<LoginProps> = ({ onLogin }) => {
 
     try {
       const response = await loginUser(username, password)
-      console.log('Login response:', response) // Afișează răspunsul API
+      console.log('Login response:', response)
 
       if (!response.token) {
-        // Dacă tokenul lipsește
         throw new Error('Token is missing in the response')
       }
 
       localStorage.setItem('token', response.token)
       onLogin(response.token)
-      navigate('/')
+      navigate('/programming-languages')
     } catch (error) {
       setError('Login failed. Please try again.')
       console.error('Login error:', error)

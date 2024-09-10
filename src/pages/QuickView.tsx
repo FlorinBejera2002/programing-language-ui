@@ -13,14 +13,15 @@ import {
   Layers
 } from 'lucide-react'
 import { Card } from '@/shadcn/components/ui/card'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { fetchLanguageById } from '../api/programing-language'
+import { IProgrammingLanguage } from 'types'
 
-export default function LanguageDetail({ token }: { token: string }) {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const id = searchParams.get('id')
-  const [language, setLanguage] = useState<any | null>(null)
+export const LanguageDetail = ({ token }: { token: string }) => {
+  const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+  const [language, setLanguage] = useState<IProgrammingLanguage | null>(null)
 
   useEffect(() => {
     if (id) {
@@ -37,7 +38,7 @@ export default function LanguageDetail({ token }: { token: string }) {
   }, [id, token])
 
   const handleClose = () => {
-    setSearchParams({})
+    navigate('/programming-languages')
   }
 
   return (

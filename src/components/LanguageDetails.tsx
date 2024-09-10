@@ -12,6 +12,8 @@ import { Input } from '@/shadcn/components/ui/input'
 import { Button } from '@/shadcn/components/ui/button'
 import { Card } from '@/shadcn/components/ui/card'
 import { cn } from '../lib/utils'
+import { ChevronLeft } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 type IProps = {
   buttonColor?: string
@@ -39,6 +41,7 @@ export const LanguageDetails = ({
   )
   const [successMessage, setSuccessMessage] = useState(false)
   const [errorMessage, setErrorMessage] = useState(false)
+  const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -64,6 +67,13 @@ export const LanguageDetails = ({
   return (
     <section className="space-y-6 w-[500px]">
       <Card className="max-w-4xl p-6">
+        <Button
+          className="w-fit group mb-5 bg-black text-white"
+          onClick={() => navigate(`/programming-languages`)}
+        >
+          <ChevronLeft className="h-6 w-6 group-hover:-translate-x-1.5 transition-transform duration-300" />
+          Back
+        </Button>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
             <div className="mb-2 block">

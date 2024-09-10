@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
-import LanguageTable from './pages/LanguageTable'
+import { LanguageTable } from './pages/LanguageTable'
 import { LoginPage } from './pages/Login'
-import LanguageDetail from './pages/DetailLanguage'
-import EditLanguageModal from './components/EditeLanguageModal'
+import { LanguageDetail } from './pages/QuickView'
 import { AddLanguage } from './pages/AddLanguage'
+import EditLanguageModal from './components/EditeLanguage'
 
 export function App() {
   const [token, setToken] = useState<null | string>(null)
@@ -27,7 +27,7 @@ export function App() {
       localStorage.setItem('token', token)
       setToken(token)
       setIsAuthenticated(true)
-      navigate('/')
+      navigate('/programming-languages')
     } catch (error) {
       console.error('Failed to set token:', error)
     }
@@ -46,17 +46,23 @@ export function App() {
       {isAuthenticated ? (
         <>
           <Routes>
-            <Route path="/" element={<LanguageTable token={token!} />} />
             <Route
-              path="/new-language"
+              path="/programming-languages"
+              element={<LanguageTable token={token!} />}
+            />
+            <Route
+              path="/programming-languages/new-language"
               element={<AddLanguage token={token!} />}
             />
             <Route
-              path="/edite/:id"
+              path="/programming-languages/:id"
+              element={<LanguageDetail token={token!} />}
+            />
+            <Route
+              path="/programming-languages/edit-language/:id"
               element={<EditLanguageModal token={token!} />}
             />
           </Routes>
-          <LanguageDetail token={token!} />
         </>
       ) : (
         <LoginPage onLogin={handleLogin} />

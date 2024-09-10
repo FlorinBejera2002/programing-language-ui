@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { fetchLanguages, deleteLanguage } from '../api/programing-language'
 import {
   Table,
@@ -10,21 +10,24 @@ import {
 } from '@/shadcn/components/ui/table'
 import { Button } from '@/shadcn/components/ui/button'
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader
-} from '@/shadcn/components/ui/dialog'
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from '@/shadcn/components/ui/alert-dialog'
 import { useNavigate } from 'react-router-dom'
-import { IdCard } from 'lucide-react'
+import { IdCard, TriangleAlert, Trash2, Pencil } from 'lucide-react'
 import { Input } from '@/shadcn/components/ui/input'
 import { IProgrammingLanguage } from 'types'
+import { Checkbox } from '@/shadcn/components/ui/checkbox'
 
-export default function LanguageList({ token }: { token: string }) {
+export const LanguageTable = ({ token }: { token: string }) => {
   const [languages, setLanguages] = useState<IProgrammingLanguage[]>([])
-  const [deleteLanguageId, setDeleteLanguageId] = useState<string | null>(null)
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
+  const [selectAll, setSelectAll] = useState(false)
+  const [alertDeleteLanguage, setAlertDeleteLanguage] = useState(false)
   const navigate = useNavigate()
 
-  // Fetch the languages on component mount
   useEffect(() => {
     const loadLanguages = async () => {
       const langs = await fetchLanguages(token)
@@ -33,14 +36,41 @@ export default function LanguageList({ token }: { token: string }) {
     loadLanguages()
   }, [token])
 
-  const handleDelete = async (id: string) => {
-    await deleteLanguage(id, token)
-    setLanguages(languages.filter((lang) => lang.id !== id))
-    setDeleteLanguageId(null)
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedLanguages([])
+    } else {
+      setSelectedLanguages(languages.map((lang) => lang.id))
+    }
+    setSelectAll(!selectAll)
   }
 
-  const handleRowClick = (id: string) => {
-    navigate(`?action=edit&id=${id}`)
+  const handleSelectLanguage = (id: string) => {
+    if (selectedLanguages.includes(id)) {
+      setSelectedLanguages(
+        selectedLanguages.filter((languageId) => languageId !== id)
+      )
+    } else {
+      setSelectedLanguages([...selectedLanguages, id])
+    }
+  }
+
+  const handleDeleteSelected = async () => {
+    try {
+      await selectedLanguages.map((languageId) =>
+        deleteLanguage(languageId, token)
+      )
+      setLanguages(
+        languages.filter((lang) => !selectedLanguages.includes(lang.id))
+      )
+      setSelectedLanguages([])
+      setAlertDeleteLanguage(false)
+    } catch (error) {
+      console.error(
+        'There was a problem deleting the selected languages:',
+        error
+      )
+    }
   }
 
   return (
@@ -53,33 +83,79 @@ export default function LanguageList({ token }: { token: string }) {
       <Table className="border rounded-md w-full">
         <TableHeader>
           <TableRow>
+            <TableHead className="w-6 h-6" onClick={handleSelectAll}>
+              <Checkbox checked={selectAll} onChange={handleSelectAll} />
+            </TableHead>
             <TableHead>
               <IdCard className="w-6 h-6" />
             </TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Creator</TableHead>
-            <TableHead></TableHead>
+            <TableHead className="flex justify-end">
+              {selectedLanguages.length > 0 && (
+                <Button
+                  className="bg-red-500 text-white"
+                  onClick={() => {
+                    setAlertDeleteLanguage(true)
+                  }}
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              )}
+            </TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
           {languages.map((lang) => (
             <TableRow key={lang.id} className="cursor-pointer">
-              <TableCell onClick={() => handleRowClick(lang.id)}>
+              <TableCell
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleSelectLanguage(lang.id)
+                }}
+              >
+                <Checkbox
+                  checked={selectedLanguages.includes(lang.id)}
+                  className="z-20 cursor-pointer"
+                  onChange={(e) => {
+                    e.stopPropagation()
+                    handleSelectLanguage(lang.id)
+                  }}
+                />
+              </TableCell>
+              <TableCell
+                onClick={() => navigate(`/programming-languages/${lang.id}`)}
+              >
                 {lang.id}
               </TableCell>
-              <TableCell onClick={() => handleRowClick(lang.id)}>
+              <TableCell
+                onClick={() => navigate(`/programming-languages/${lang.id}`)}
+              >
                 {lang.name}
               </TableCell>
-              <TableCell onClick={() => handleRowClick(lang.id)}>
+              <TableCell
+                onClick={() => navigate(`/programming-languages/${lang.id}`)}
+              >
                 {lang.creator}
               </TableCell>
               <TableCell className="flex justify-end gap-2">
-                <Button onClick={() => navigate(`/edit/${lang.id}`)}>
-                  Edit
+                <Button
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    e.stopPropagation()
+                    navigate(`/programming-languages/edit-language/${lang.id}`)
+                  }}
+                >
+                  <Pencil className="w-4 h-4" />
                 </Button>
-                <Button onClick={() => setDeleteLanguageId(lang.id)}>
-                  Delete
+                <Button
+                  className="text-red-500"
+                  onClick={() => {
+                    setSelectedLanguages([lang.id])
+                    setAlertDeleteLanguage(true)
+                  }}
+                >
+                  <Trash2 />
                 </Button>
               </TableCell>
             </TableRow>
@@ -87,20 +163,35 @@ export default function LanguageList({ token }: { token: string }) {
         </TableBody>
       </Table>
 
-      {/* Dialog pentru confirmare ștergere */}
-      {deleteLanguageId && (
-        <Dialog open={true} onOpenChange={() => setDeleteLanguageId(null)}>
-          <DialogHeader>Delete Language</DialogHeader>
-          <DialogContent>
-            Are you sure you want to delete this language?
-            <div className="flex justify-end gap-4 mt-4">
-              <Button onClick={() => handleDelete(deleteLanguageId!)}>
+      {alertDeleteLanguage && (
+        <AlertDialog
+          open={alertDeleteLanguage}
+          onOpenChange={setAlertDeleteLanguage}
+        >
+          <AlertDialogContent className="bg-white max-w-xs p-5">
+            <AlertDialogHeader className="flex flex-col gap-2 justify-center items-center">
+              <TriangleAlert className="w-10 h-10 text-red-700" />
+              <AlertDialogTitle className="text-lg font-semibold">
+                Are you sure you want to delete this language?
+              </AlertDialogTitle>
+            </AlertDialogHeader>
+
+            <div className="flex justify-between mt-4">
+              <Button
+                onClick={() => setAlertDeleteLanguage(false)}
+                className="bg-black text-white"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleDeleteSelected}
+                className="bg-red-500 text-white"
+              >
                 Delete
               </Button>
-              <Button onClick={() => setDeleteLanguageId(null)}>Cancel</Button>
             </div>
-          </DialogContent>
-        </Dialog>
+          </AlertDialogContent>
+        </AlertDialog>
       )}
     </div>
   )

@@ -5,9 +5,10 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': '/src', // Verifică că aliasul indică spre folderul src sau alt folder relevant
+      '@': '/src',
     },
   },
   server: {
-    port: 9000, 
-  },});
+    port: 9000,
+  },
+});

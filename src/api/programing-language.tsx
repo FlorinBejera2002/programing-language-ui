@@ -1,6 +1,6 @@
 import { IProgrammingLanguage, IProgrammingParadigm } from '../types'
 
-const API_URL = 'http://164.90.166.249:3001' // Prefixează cererile cu /api
+const API_URL = 'http://164.90.166.249:3001'
 
 export interface User {
   id: number
@@ -35,9 +35,8 @@ export async function loginUser(
     throw new Error('Login failed')
   }
 
-  const data = await res.json() // Parsează răspunsul JSON
-  console.log('Raw response:', data) // Verifică ce primești de la server
-
+  const data = await res.json()
+  console.log('Raw response:', data)
   return data
 }
 
@@ -90,7 +89,7 @@ export async function fetchNewLanguage(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}` // Trimite token-ul în format Bearer
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify(language)
   })
@@ -119,7 +118,7 @@ export async function updateLanguage(
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}` // Trimite token-ul în format Bearer
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify(language)
   })
@@ -136,7 +135,7 @@ export async function deleteLanguage(id: string, token: string): Promise<void> {
   const res = await fetch(`${API_URL}/programming-languages/${id}`, {
     method: 'DELETE',
     headers: {
-      Authorization: `Bearer ${token}` // Trimite token-ul în format Bearer
+      Authorization: `Bearer ${token}`
     }
   })
 
