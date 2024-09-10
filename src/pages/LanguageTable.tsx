@@ -91,15 +91,15 @@ export const LanguageTable = ({ token }: { token: string }) => {
             </TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Creator</TableHead>
-            <TableHead className="flex justify-end">
+            <TableHead className="text-end">
               {selectedLanguages.length > 0 && (
                 <Button
-                  className="bg-red-500 text-white"
+                  className="bg-red-500 text-white "
                   onClick={() => {
                     setAlertDeleteLanguage(true)
                   }}
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-6 h-6" />
                 </Button>
               )}
             </TableHead>
@@ -178,7 +178,10 @@ export const LanguageTable = ({ token }: { token: string }) => {
 
             <div className="flex justify-between mt-4">
               <Button
-                onClick={() => setAlertDeleteLanguage(false)}
+                onClick={() => {
+                  setSelectedLanguages([])
+                  setAlertDeleteLanguage(false)
+                }}
                 className="bg-black text-white"
               >
                 Cancel
