@@ -81,7 +81,18 @@ export async function fetchLanguageById(id: string, token: string) {
   return res.json()
 }
 
-export async function fetchLanguagesByKeyword(keyword: string, token: string) {
+export async function fetchLanguagesByKeyword(
+  keyword: string,
+  sortOrder: string,
+  sortBy: string,
+  token: string
+) {
+  console.log('Sending request with:', {
+    search_keyword: keyword,
+    sortBy: sortBy,
+    sortOrder: sortOrder
+  })
+
   const res = await fetch(`${API_URL}/programming-languages/search-sort`, {
     method: 'POST',
     headers: {
@@ -90,8 +101,8 @@ export async function fetchLanguagesByKeyword(keyword: string, token: string) {
     },
     body: JSON.stringify({
       search_keyword: keyword,
-      sortBy: keyword,
-      sortOrder: 'asc'
+      sortBy: sortBy || 'name',
+      sortOrder: 'asc' || sortOrder
     })
   })
 
@@ -163,3 +174,30 @@ export async function deleteLanguage(id: string, token: string): Promise<void> {
     throw new Error(errorMessage || 'Failed to delete language')
   }
 }
+
+// export async function fetchLanguagesWithPagination(
+//   page: number,
+//   pageSize: number,
+//   token: string
+// ) {
+//   const res = await fetch(
+//     `${API_URL}/programming-languages?page=${page}&pageSize=${pageSize}`,
+//     {
+//       method: 'GET',
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         'Content-Type': 'application/json'
+//       }
+//     }
+//   )
+
+//   if (!res.ok) {
+//     throw new Error(`Error fetching data: ${res.statusText}`)
+//   }
+
+//   const data = await res.json()
+//   return {
+//     items: data.items,
+//     totalPages: data.totalPages
+//   }
+// }

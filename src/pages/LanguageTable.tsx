@@ -20,10 +20,17 @@ import {
   AlertDialogTitle
 } from '@/shadcn/components/ui/alert-dialog'
 import { useNavigate } from 'react-router-dom'
-import { IdCard, TriangleAlert, Trash2, Pencil } from 'lucide-react'
+import { TriangleAlert, Trash2, Pencil, ArrowUp, ArrowDown } from 'lucide-react'
 import { Input } from '@/shadcn/components/ui/input'
 import { IProgrammingLanguage } from 'types'
 import { Checkbox } from '@/shadcn/components/ui/checkbox'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/shadcn/components/ui/select'
 
 export const LanguageTable = ({ token }: { token: string }) => {
   const [languages, setLanguages] = useState<IProgrammingLanguage[]>([])
@@ -31,21 +38,46 @@ export const LanguageTable = ({ token }: { token: string }) => {
   const [selectAll, setSelectAll] = useState(false)
   const [alertDeleteLanguage, setAlertDeleteLanguage] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
+  const [sortOrder, setSortOrder] = useState('desc')
+  const [sortBy, setSortBy] = useState('name')
+  const [page, setPage] = useState(0)
+  // const [pageSize] = useState(10)
+  // const [totalPages, setTotalPages] = useState(1)
   const navigate = useNavigate()
-
   useEffect(() => {
     const loadLanguages = async () => {
       if (searchTerm !== '') {
         setLanguages([])
-        const filterData = await fetchLanguagesByKeyword(searchTerm, token)
+        const filterData = await fetchLanguagesByKeyword(
+          searchTerm,
+          sortOrder,
+          sortBy,
+          token
+        )
+        console.log('Languages after filtering and sorting:', filterData)
         setLanguages(filterData)
       } else {
         const data = await fetchLanguages(token)
+        console.log('Languages without filtering:', data)
         setLanguages(data)
       }
     }
     loadLanguages()
-  }, [searchTerm, token])
+  }, [searchTerm, sortOrder, sortBy, token])
+
+  // useEffect(() => {
+  //   const loadLanguages = async () => {
+  //     try {
+  //       const data = await fetchLanguagesWithPagination(page, pageSize, token)
+  //       setLanguages(data.items)
+  //       setTotalPages(data.totalPages)
+  //     } catch (error) {
+  //       console.error('Error loading languages:', error)
+  //     }
+  //   }
+
+  //   loadLanguages()
+  // }, [page, pageSize, token])
 
   const handleSelectAll = () => {
     if (selectAll) {
@@ -86,7 +118,7 @@ export const LanguageTable = ({ token }: { token: string }) => {
 
   return (
     <div className="flex flex-col max-w-6xl mx-auto justify-center items-center h-screen">
-      <div className="flex justify-between items-center pb-4 w-full">
+      <div className="flex justify-between items-center pb-4 w-full max-w-4xl">
         <Input
           placeholder="Search..."
           className="w-fit"
@@ -94,89 +126,255 @@ export const LanguageTable = ({ token }: { token: string }) => {
         />
         <Button className="">hidden</Button>
       </div>
+      <div className="border rounded-md w-full max-w-4xl">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-6 h-6 pl-5" onClick={handleSelectAll}>
+                <Checkbox checked={selectAll} onChange={handleSelectAll} />
+              </TableHead>
 
-      <Table className="border rounded-md w-full">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-6 h-6" onClick={handleSelectAll}>
-              <Checkbox checked={selectAll} onChange={handleSelectAll} />
-            </TableHead>
-            <TableHead>
-              <IdCard className="w-6 h-6" />
-            </TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Creator</TableHead>
-            <TableHead className="text-end">
-              {selectedLanguages.length > 0 && (
-                <Button
-                  className="bg-red-500 text-white "
-                  onClick={() => {
-                    setAlertDeleteLanguage(true)
-                  }}
-                >
-                  <Trash2 className="w-6 h-6" />
-                </Button>
-              )}
-            </TableHead>
-          </TableRow>
-        </TableHeader>
+              <TableHead>
+                <Select value={''}>
+                  <SelectTrigger className="border-none shadow-none space-x-2 ">
+                    <SelectValue />
+                    Nume
+                  </SelectTrigger>
+                  <SelectContent className="bg-white">
+                    <SelectItem
+                      value="asc"
+                      onClick={() => {
+                        setSortOrder('asc')
+                        setSortBy('id')
+                      }}
+                    >
+                      <span className="flex items-center gap-2 text-gray-700">
+                        <ArrowUp className="w-3 h-3" />
+                        asc
+                      </span>
+                    </SelectItem>
+                    <SelectItem
+                      value="desc"
+                      onClick={() => {
+                        setSortOrder('desc')
+                        setSortBy('id')
+                      }}
+                    >
+                      <span className="flex items-center gap-2 text-gray-700">
+                        <ArrowDown className="w-3 h-3" />
+                        desc
+                      </span>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </TableHead>
 
-        <TableBody>
-          {languages.map((lang) => (
-            <TableRow key={lang.id} className="cursor-pointer">
-              <TableCell
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleSelectLanguage(lang.id)
-                }}
+              <TableHead>
+                <Select value={''}>
+                  <SelectTrigger className="border-none shadow-none space-x-2">
+                    <SelectValue />
+                    Creator
+                  </SelectTrigger>
+                  <SelectContent className="bg-white">
+                    <SelectItem
+                      value="asc"
+                      onClick={() => {
+                        setSortOrder('asc')
+                        setSortBy('id')
+                      }}
+                    >
+                      <span className="flex items-center gap-2 text-gray-700">
+                        <ArrowUp className="w-3 h-3" />
+                        asc
+                      </span>
+                    </SelectItem>
+                    <SelectItem
+                      value="desc"
+                      onClick={() => {
+                        setSortOrder('desc')
+                        setSortBy('id')
+                      }}
+                    >
+                      <span className="flex items-center gap-2 text-gray-700">
+                        <ArrowDown className="w-3 h-3" />
+                        desc
+                      </span>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </TableHead>
+
+              <TableHead>
+                <Select value={''}>
+                  <SelectTrigger className="border-none shadow-none space-x-2">
+                    <SelectValue />
+                    Relese Year
+                  </SelectTrigger>
+                  <SelectContent className="bg-white">
+                    <SelectItem
+                      value="asc"
+                      onClick={() => {
+                        setSortOrder('asc')
+                        setSortBy('id')
+                      }}
+                    >
+                      <span className="flex items-center gap-2 text-gray-700">
+                        <ArrowUp className="w-3 h-3" />
+                        asc
+                      </span>
+                    </SelectItem>
+                    <SelectItem
+                      value="desc"
+                      onClick={() => {
+                        setSortOrder('desc')
+                        setSortBy('id')
+                      }}
+                    >
+                      <span className="flex items-center gap-2 text-gray-700">
+                        <ArrowDown className="w-3 h-3" />
+                        desc
+                      </span>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </TableHead>
+
+              <TableHead>
+                <Select value={''}>
+                  <SelectTrigger className="border-none shadow-none space-x-2">
+                    <SelectValue />
+                    Populaity
+                  </SelectTrigger>
+                  <SelectContent className="bg-white">
+                    <SelectItem
+                      value="asc"
+                      onClick={() => {
+                        setSortOrder('asc')
+                        setSortBy('id')
+                      }}
+                    >
+                      <span className="flex items-center gap-2 text-gray-700">
+                        <ArrowUp className="w-3 h-3" />
+                        asc
+                      </span>
+                    </SelectItem>
+                    <SelectItem
+                      value="desc"
+                      onClick={() => {
+                        setSortOrder('desc')
+                        setSortBy('id')
+                      }}
+                    >
+                      <span className="flex items-center gap-2 text-gray-700">
+                        <ArrowDown className="w-3 h-3" />
+                        desc
+                      </span>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </TableHead>
+
+              <TableHead className="text-end">
+                {selectedLanguages.length > 0 && (
+                  <Button
+                    className="bg-red-500 text-white "
+                    onClick={() => {
+                      setAlertDeleteLanguage(true)
+                    }}
+                  >
+                    <Trash2 className="w-6 h-6" />
+                  </Button>
+                )}
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+
+          <TableBody>
+            {languages.map((lang) => (
+              <TableRow
+                key={lang.id}
+                className="cursor-pointer hover:bg-gray-100 text-gray-700"
               >
-                <Checkbox
-                  checked={selectedLanguages.includes(lang.id)}
-                  className="z-20 cursor-pointer"
-                  onChange={(e) => {
+                <TableCell
+                  onClick={(e) => {
                     e.stopPropagation()
                     handleSelectLanguage(lang.id)
                   }}
-                />
-              </TableCell>
-              <TableCell
-                onClick={() => navigate(`/programming-languages/${lang.id}`)}
-              >
-                {lang.id}
-              </TableCell>
-              <TableCell
-                onClick={() => navigate(`/programming-languages/${lang.id}`)}
-              >
-                {lang.name}
-              </TableCell>
-              <TableCell
-                onClick={() => navigate(`/programming-languages/${lang.id}`)}
-              >
-                {lang.creator}
-              </TableCell>
-              <TableCell className="flex justify-end gap-2">
-                <Button
-                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                    e.stopPropagation()
-                    navigate(`/programming-languages/edit-language/${lang.id}`)
-                  }}
                 >
-                  <Pencil className="w-4 h-4" />
-                </Button>
-                <Button
-                  className="text-red-500"
-                  onClick={() => {
-                    setSelectedLanguages([lang.id])
-                    setAlertDeleteLanguage(true)
-                  }}
+                  <Checkbox
+                    checked={selectedLanguages.includes(lang.id)}
+                    className="z-20 cursor-pointer"
+                    onChange={(e) => {
+                      e.stopPropagation()
+                      handleSelectLanguage(lang.id)
+                    }}
+                  />
+                </TableCell>
+
+                <TableCell
+                  onClick={() => navigate(`/programming-languages/${lang.id}`)}
                 >
-                  <Trash2 />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                  {lang.name}
+                </TableCell>
+
+                <TableCell
+                  onClick={() => navigate(`/programming-languages/${lang.id}`)}
+                >
+                  {lang.creator}
+                </TableCell>
+                <TableCell
+                  onClick={() => navigate(`/programming-languages/${lang.id}`)}
+                >
+                  {lang.releaseYear}
+                </TableCell>
+                <TableCell
+                  onClick={() => navigate(`/programming-languages/${lang.id}`)}
+                >
+                  {lang.popularity}
+                </TableCell>
+
+                <TableCell className="flex justify-end gap-2">
+                  <Button
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.stopPropagation()
+                      navigate(
+                        `/programming-languages/edit-language/${lang.id}`
+                      )
+                    }}
+                  >
+                    <Pencil className="w-3 h-3" />
+                  </Button>
+                  <Button
+                    className="text-red-500"
+                    onClick={() => {
+                      setSelectedLanguages([lang.id])
+                      setAlertDeleteLanguage(true)
+                    }}
+                  >
+                    <Trash2 />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="flex items-center justify-between mt-4">
+        <Button
+          disabled={page === 0}
+          onClick={() => setPage((prev) => Math.max(0, prev - 1))}
+        >
+          Previous
+        </Button>
+        <span>{/* Page {page + 1} of {totalPages} */}</span>
+        <Button
+        // disabled={page >= totalPages - 1}
+        // onClick={() => setPage((prev) => Math.min(totalPages - 1, prev + 1))}
+        >
+          Next
+        </Button>
+      </div>
 
       {alertDeleteLanguage && (
         <AlertDialog
