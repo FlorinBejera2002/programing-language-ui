@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { fetchLanguages, deleteLanguage } from '../api/programing-language'
+import {
+  deleteLanguage,
+  fetchLanguages,
+  fetchLanguagesByKeyword
+} from '../api/programing-language'
 import {
   Table,
   TableBody,
@@ -26,15 +30,22 @@ export const LanguageTable = ({ token }: { token: string }) => {
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
   const [selectAll, setSelectAll] = useState(false)
   const [alertDeleteLanguage, setAlertDeleteLanguage] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
     const loadLanguages = async () => {
-      const langs = await fetchLanguages(token)
-      setLanguages(langs)
+      if (searchTerm !== '') {
+        setLanguages([])
+        const filterData = await fetchLanguagesByKeyword(searchTerm, token)
+        setLanguages(filterData)
+      } else {
+        const data = await fetchLanguages(token)
+        setLanguages(data)
+      }
     }
     loadLanguages()
-  }, [token])
+  }, [searchTerm, token])
 
   const handleSelectAll = () => {
     if (selectAll) {
@@ -76,7 +87,11 @@ export const LanguageTable = ({ token }: { token: string }) => {
   return (
     <div className="flex flex-col max-w-6xl mx-auto justify-center items-center h-screen">
       <div className="flex justify-between items-center pb-4 w-full">
-        <Input placeholder="Search..." className="w-fit" />
+        <Input
+          placeholder="Search..."
+          className="w-fit"
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
         <Button className="">hidden</Button>
       </div>
 

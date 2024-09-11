@@ -81,6 +81,25 @@ export async function fetchLanguageById(id: string, token: string) {
   return res.json()
 }
 
+export async function fetchLanguagesByKeyword(keyword: string, token: string) {
+  const res = await fetch(`${API_URL}/programming-languages/search-sort`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      search_keyword: keyword,
+      sortBy: keyword,
+      sortOrder: 'asc'
+    })
+  })
+
+  const data = await res.json()
+  console.log('Filtered languages:', data)
+  return data
+}
+
 export async function fetchNewLanguage(
   language: IProgrammingLanguage,
   token: string
