@@ -10,13 +10,15 @@ import {
   UserPlus,
   CalendarDays,
   Code2,
-  Layers
+  Layers,
+  Pencil
 } from 'lucide-react'
 import { Card } from '@/shadcn/components/ui/card'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { fetchLanguageById } from '../api/programing-language'
 import { IProgrammingLanguage } from 'types'
+import { Button } from '@/shadcn/components/ui/button'
 
 export const LanguageDetail = ({ token }: { token: string }) => {
   const { id } = useParams<{ id: string }>()
@@ -74,6 +76,14 @@ export const LanguageDetail = ({ token }: { token: string }) => {
             </div>
           </Card>
         )}
+        <Button
+          className="w-fit flex justify-end"
+          onClick={() =>
+            navigate(`/programming-languages/edit-language/${language!.id}`)
+          }
+        >
+          <Pencil className="w-6 h-6" />
+        </Button>
       </SheetContent>
     </Sheet>
   )

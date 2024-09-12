@@ -121,12 +121,12 @@ export const LanguageTable = ({ token }: { token: string }) => {
       <div className="flex justify-between items-center pb-4 w-full max-w-4xl">
         <Input
           placeholder="Search..."
-          className="w-fit"
+          className="w-fit bg-white"
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <Button className="">hidden</Button>
+        <Button className="bg-white">hidden</Button>
       </div>
-      <div className="border rounded-md w-full max-w-4xl">
+      <div className="border rounded-md w-full max-w-4xl bg-white">
         <Table>
           <TableHeader>
             <TableRow>
