@@ -21,7 +21,7 @@ export const AddLanguage = ({ token }: { token: string }) => {
         functionSubmit={async (languageData) => {
           await fetchNewLanguage(languageData, token)
           setTimeout(() => {
-            navigate('/programming-languages')
+            navigate('/programming-languages/table-languages')
           }, 2000)
         }}
         textButton="Add Language"

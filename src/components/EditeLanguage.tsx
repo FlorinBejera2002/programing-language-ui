@@ -52,7 +52,7 @@ export default function EditLanguageModal({ token }: IProps) {
           )
 
           setTimeout(() => {
-            navigate('/programming-languages')
+            navigate('/programming-languages/table-languages')
           }, 2000)
         }}
         textButton="Save"

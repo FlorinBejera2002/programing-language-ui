@@ -40,7 +40,7 @@ export const LanguageDetail = ({ token }: { token: string }) => {
   }, [id, token])
 
   const handleClose = () => {
-    navigate('/programming-languages')
+    navigate('/programming-languages/table-languages')
   }
 
   return (

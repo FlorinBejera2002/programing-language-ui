@@ -69,7 +69,7 @@ export const LanguageDetails = ({
       <Card className="max-w-4xl p-6">
         <Button
           className="w-fit group mb-5 bg-black text-white"
-          onClick={() => navigate(`/programming-languages`)}
+          onClick={() => navigate(`/programming-languages/table-languages`)}
         >
           <ChevronLeft className="h-6 w-6 group-hover:-translate-x-1.5 transition-transform duration-300" />
           Back

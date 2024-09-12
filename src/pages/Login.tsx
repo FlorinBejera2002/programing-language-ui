@@ -29,7 +29,7 @@ export const LoginPage: React.FC<LoginProps> = ({ onLogin }) => {
 
       localStorage.setItem('token', response.token)
       onLogin(response.token, username)
-      navigate('/programming-languages')
+      navigate('/programming-languages/overview')
     } catch (error) {
       setError('Login failed. Please try again.')
       console.error('Login error:', error)

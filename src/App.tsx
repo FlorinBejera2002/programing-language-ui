@@ -6,6 +6,7 @@ import { LanguageDetail } from './pages/QuickView'
 import { AddLanguage } from './pages/AddLanguage'
 import EditLanguageModal from './components/EditeLanguage'
 import { Sidebar } from './components/Sidebar'
+import { Overview } from './pages/Overview'
 
 export function App() {
   const [token, setToken] = useState<null | string>(null)
@@ -31,7 +32,7 @@ export function App() {
       localStorage.setItem('token', token)
       setToken(token)
       setIsAuthenticated(true)
-      navigate('/programming-languages')
+      navigate('/programming-languages/overview')
     } catch (error) {
       console.error('Failed to set token:', error)
     }
@@ -56,7 +57,7 @@ export function App() {
           <div className="p-6 ">
             <Routes>
               <Route
-                path="/programming-languages"
+                path="/programming-languages/table-languages"
                 element={<LanguageTable token={token!} />}
               />
               <Route
@@ -70,6 +71,10 @@ export function App() {
               <Route
                 path="/programming-languages/edit-language/:id"
                 element={<EditLanguageModal token={token!} />}
+              />
+              <Route
+                path="/programming-languages/overview"
+                element={<Overview token={token!} />}
               />
             </Routes>
           </div>

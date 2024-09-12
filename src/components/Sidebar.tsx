@@ -22,7 +22,7 @@ export const Sidebar = ({ username, onLogout }: IProps) => {
 
       <nav className="flex flex-col gap-4 items-start">
         <Button
-          onClick={() => navigate('/programming-languages')}
+          onClick={() => navigate('/programming-languages/overview')}
           variant="ghost"
           className="flex gap-2 items-center text-md w-full justify-start hover:bg-[#414c4c]"
         >
@@ -30,11 +30,11 @@ export const Sidebar = ({ username, onLogout }: IProps) => {
         </Button>
 
         <Button
-          onClick={() => navigate('/programming-languages')}
+          onClick={() => navigate('/programming-languages/table-languages')}
           variant="ghost"
           className="flex gap-2 items-center text-md w-full justify-start hover:bg-[#414c4c]"
         >
-          <Home className="w-6 h-6" /> Home
+          <Home className="w-6 h-6" /> Table Languages
         </Button>
 
         <Button
@@ -44,6 +44,7 @@ export const Sidebar = ({ username, onLogout }: IProps) => {
         >
           <ListPlus className="w-6 h-6" /> Add Language
         </Button>
+
         <div className="bottom-5 absolute flex flex-col gap-6 items-center ">
           <Button
             variant="ghost"
