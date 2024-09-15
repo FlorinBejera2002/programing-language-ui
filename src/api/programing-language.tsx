@@ -82,10 +82,10 @@ export async function fetchLanguageById(id: string, token: string) {
 }
 
 export async function fetchLanguagesByKeyword(
+  token: string,
   keyword: string,
-  sortOrder: string,
-  sortBy: string,
-  token: string
+  sortOrder?: string,
+  sortBy?: string
 ) {
   console.log('Sending request with:', {
     search_keyword: keyword,
@@ -101,8 +101,8 @@ export async function fetchLanguagesByKeyword(
     },
     body: JSON.stringify({
       search_keyword: keyword,
-      sortBy: sortBy,
-      sortOrder: sortOrder || 'asc'
+      sortBy,
+      sortOrder
     })
   })
 

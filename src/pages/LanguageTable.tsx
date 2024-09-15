@@ -47,9 +47,6 @@ export const LanguageTable = ({ token }: { token: string }) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [sortOrder, setSortOrder] = useState('desc')
   const [sortBy, setSortBy] = useState('name')
-  const [page, setPage] = useState(0)
-  // const [pageSize] = useState(10)
-  // const [totalPages, setTotalPages] = useState(1)
   const navigate = useNavigate()
   useEffect(() => {
     const loadLanguages = async () => {
@@ -71,20 +68,6 @@ export const LanguageTable = ({ token }: { token: string }) => {
     }
     loadLanguages()
   }, [searchTerm, sortOrder, sortBy, token])
-
-  // useEffect(() => {
-  //   const loadLanguages = async () => {
-  //     try {
-  //       const data = await fetchLanguagesWithPagination(page, pageSize, token)
-  //       setLanguages(data.items)
-  //       setTotalPages(data.totalPages)
-  //     } catch (error) {
-  //       console.error('Error loading languages:', error)
-  //     }
-  //   }
-
-  //   loadLanguages()
-  // }, [page, pageSize, token])
 
   const handleSelectAll = () => {
     if (selectAll) {
@@ -367,22 +350,6 @@ export const LanguageTable = ({ token }: { token: string }) => {
             ))}
           </TableBody>
         </Table>
-      </div>
-
-      <div className="flex items-center justify-between mt-4">
-        <Button
-          disabled={page === 0}
-          onClick={() => setPage((prev) => Math.max(0, prev - 1))}
-        >
-          Previous
-        </Button>
-        <span>{/* Page {page + 1} of {totalPages} */}</span>
-        <Button
-        // disabled={page >= totalPages - 1}
-        // onClick={() => setPage((prev) => Math.min(totalPages - 1, prev + 1))}
-        >
-          Next
-        </Button>
       </div>
 
       {alertDeleteLanguage && (
