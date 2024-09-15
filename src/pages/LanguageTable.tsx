@@ -20,7 +20,14 @@ import {
   AlertDialogTitle
 } from '@/shadcn/components/ui/alert-dialog'
 import { useNavigate } from 'react-router-dom'
-import { TriangleAlert, Trash2, Pencil, ArrowUp, ArrowDown } from 'lucide-react'
+import {
+  TriangleAlert,
+  Trash2,
+  Pencil,
+  ArrowUp,
+  ArrowDown,
+  Search
+} from 'lucide-react'
 import { Input } from '@/shadcn/components/ui/input'
 import { IProgrammingLanguage } from 'types'
 import { Checkbox } from '@/shadcn/components/ui/checkbox'
@@ -117,16 +124,17 @@ export const LanguageTable = ({ token }: { token: string }) => {
   }
 
   return (
-    <div className="flex flex-col max-w-6xl mx-auto justify-center items-center h-screen">
-      <div className="flex justify-between items-center pb-4 w-full max-w-4xl">
+    <div className="flex flex-col p-2 mx-auto justify-center overflow-hidden mt-20">
+      <div className="flex justify-between items-center pb-4 w-full relative">
         <Input
           placeholder="Search..."
-          className="w-fit bg-white"
+          className="w-fit pl-10 bg-white "
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        <Search className="absolute w-5 h-5 top-2 left-3 text-gray-500" />
         <Button className="bg-white">hidden</Button>
       </div>
-      <div className="border rounded-md w-full max-w-4xl bg-white">
+      <div className="border rounded-md w-full bg-white">
         <Table>
           <TableHeader>
             <TableRow>
@@ -293,7 +301,7 @@ export const LanguageTable = ({ token }: { token: string }) => {
             {languages.map((lang) => (
               <TableRow
                 key={lang.id}
-                className="cursor-pointer hover:bg-gray-100 text-gray-700"
+                className="cursor-pointer hover:bg-[#b7bfbf] text-gray-800 group"
               >
                 <TableCell
                   onClick={(e) => {
@@ -303,7 +311,7 @@ export const LanguageTable = ({ token }: { token: string }) => {
                 >
                   <Checkbox
                     checked={selectedLanguages.includes(lang.id)}
-                    className="z-20 cursor-pointer"
+                    className="z-20 cursor-pointer group-hover:bg-white"
                     onChange={(e) => {
                       e.stopPropagation()
                       handleSelectLanguage(lang.id)
@@ -333,8 +341,9 @@ export const LanguageTable = ({ token }: { token: string }) => {
                   {lang.popularity}
                 </TableCell>
 
-                <TableCell className="flex justify-end gap-2">
+                <TableCell className="flex justify-end gap-2 ">
                   <Button
+                    className="group-hover:bg-white"
                     onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                       e.stopPropagation()
                       navigate(
@@ -342,10 +351,10 @@ export const LanguageTable = ({ token }: { token: string }) => {
                       )
                     }}
                   >
-                    <Pencil className="w-3 h-3" />
+                    <Pencil className="w-5 h-5" />
                   </Button>
                   <Button
-                    className="text-red-500"
+                    className="text-red-500 group-hover:bg-white"
                     onClick={() => {
                       setSelectedLanguages([lang.id])
                       setAlertDeleteLanguage(true)

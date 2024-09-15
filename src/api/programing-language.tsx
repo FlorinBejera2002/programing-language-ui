@@ -101,8 +101,8 @@ export async function fetchLanguagesByKeyword(
     },
     body: JSON.stringify({
       search_keyword: keyword,
-      sortBy: sortBy || 'name',
-      sortOrder: 'asc' || sortOrder
+      sortBy: sortBy,
+      sortOrder: sortOrder || 'asc'
     })
   })
 

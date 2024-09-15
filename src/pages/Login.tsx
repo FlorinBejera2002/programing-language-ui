@@ -75,7 +75,7 @@ export const LoginPage: React.FC<LoginProps> = ({ onLogin }) => {
             />
             <Button
               type="submit"
-              className="w-full hover:bg-gradient-to-bl bg-gradient-to-tl from-[#C0C7C7] to-[#5A6A6A] text-white font-bold py-2 px-4 rounded"
+              className="w-full hover:bg-[#b7bfbf] bg-[#738888] text-white font-bold py-2 px-4 rounded"
             >
               Login
             </Button>

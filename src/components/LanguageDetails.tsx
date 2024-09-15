@@ -130,7 +130,7 @@ export const LanguageDetails = ({
                 setParadigm(value as IProgrammingParadigm)
               }
             >
-              <SelectTrigger>
+              <SelectTrigger className="!w-full">
                 <SelectValue placeholder="Select a paradigm" />
               </SelectTrigger>
               <SelectContent className="bg-white">
@@ -138,7 +138,7 @@ export const LanguageDetails = ({
                   <SelectItem
                     key={key}
                     value={value}
-                    className="hover:bg-gray-100"
+                    className="hover:bg-[#b7bfbf]"
                   >
                     {value}
                   </SelectItem>

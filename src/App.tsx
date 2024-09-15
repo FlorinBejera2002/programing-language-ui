@@ -54,7 +54,7 @@ export function App() {
       )}
       {isAuthenticated ? (
         <div className={`flex-1 ${isAuthenticated ? 'ml-64' : ''}`}>
-          <div className="p-6 ">
+          <div className="p-4">
             <Routes>
               <Route
                 path="/programming-languages/table-languages"

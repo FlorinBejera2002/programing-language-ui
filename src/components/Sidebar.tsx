@@ -1,11 +1,17 @@
 import { Button } from '@/shadcn/components/ui/button'
 import {
-  Home,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuTrigger
+} from '@/shadcn/components/ui/dropdown-menu'
+import {
+  Table,
   LogOut,
-  Users,
   Code,
   ListPlus,
-  LayoutDashboard
+  LayoutDashboard,
+  CircleUserRound
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 type IProps = {
@@ -24,7 +30,7 @@ export const Sidebar = ({ username, onLogout }: IProps) => {
         <Button
           onClick={() => navigate('/programming-languages/overview')}
           variant="ghost"
-          className="flex gap-2 items-center text-md w-full justify-start hover:bg-[#414c4c]"
+          className="flex gap-2 items-center text-md w-full justify-start hover:bg-[#b7bfbf]"
         >
           <LayoutDashboard className="w-6 h-6" /> Overview
         </Button>
@@ -32,36 +38,37 @@ export const Sidebar = ({ username, onLogout }: IProps) => {
         <Button
           onClick={() => navigate('/programming-languages/table-languages')}
           variant="ghost"
-          className="flex gap-2 items-center text-md w-full justify-start hover:bg-[#414c4c]"
+          className="flex gap-2 items-center text-md w-full justify-start hover:bg-[#b7bfbf]"
         >
-          <Home className="w-6 h-6" /> Table Languages
+          <Table className="w-6 h-6" /> Table Languages
         </Button>
 
         <Button
           onClick={() => navigate('/programming-languages/new-language')}
           variant="ghost"
-          className="flex gap-2 items-center text-md w-full justify-start hover:bg-[#414c4c]"
+          className="flex gap-2 items-center text-md w-full justify-start hover:bg-[#b7bfbf]"
         >
           <ListPlus className="w-6 h-6" /> Add Language
         </Button>
 
-        <div className="bottom-5 absolute flex flex-col gap-6 items-center ">
-          <Button
-            variant="ghost"
-            className="flex gap-2 shadow-xl items-center text-md w-full justify-start bg-[#C0C7C7] border-b pb-4 border-gray-400"
-          >
-            <Users className="w-6 h-6" />
-            <span className="mt-1">{username}</span>
-          </Button>
-
-          <Button
-            onClick={onLogout}
-            variant="ghost"
-            className="flex gap-2 bg-red-500 w-44 text-md font-bold items-center justify-start"
-          >
-            <LogOut className="w-5 h-5" /> Logout
-          </Button>
-        </div>
+        <div className=" "></div>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="bottom-0 absolute left-0 flex gap-2 shadow-xl items-center p-3 w-full justify-start bg-[#5A6A6A]">
+            <CircleUserRound className="w-6 h-6 " />
+            <span className="mt-1 text-xl font-bold ">{username}</span>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>
+              <Button
+                onClick={onLogout}
+                variant="ghost"
+                className="flex gap-2 bg-red-500 w-44 text-md font-bold items-center justify-start"
+              >
+                <LogOut className="w-5 h-5" /> Logout
+              </Button>
+            </DropdownMenuLabel>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </nav>
     </div>
   )
