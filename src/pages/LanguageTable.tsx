@@ -124,6 +124,7 @@ export const LanguageTable = ({ token }: { token: string }) => {
               <TableHead className="w-6 h-6 pl-5" onClick={handleSelectAll}>
                 <Checkbox checked={selectAll} onChange={handleSelectAll} />
               </TableHead>
+              <TableHead className="pl-5">Logo</TableHead>
 
               <TableHead>
                 <Select value={''}>
@@ -299,6 +300,15 @@ export const LanguageTable = ({ token }: { token: string }) => {
                       e.stopPropagation()
                       handleSelectLanguage(lang.id)
                     }}
+                  />
+                </TableCell>
+                <TableCell
+                  onClick={() => navigate(`/programming-languages/${lang.id}`)}
+                >
+                  <img
+                    src={`../../public/${lang.name.toLocaleLowerCase()}.png`}
+                    alt="logo"
+                    className="h-6 w-auto"
                   />
                 </TableCell>
 
