@@ -1,25 +1,22 @@
 import { Button } from '@/shadcn/components/ui/button'
+import { Avatar, AvatarImage } from '@/shadcn/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/shadcn/components/ui/dropdown-menu'
-import {
-  Table,
-  LogOut,
-  Code,
-  ListPlus,
-  LayoutDashboard,
-  CircleUserRound
-} from 'lucide-react'
+import { Table, LogOut, Code, ListPlus, LayoutDashboard } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import UserAvatar from '../../public/Avatar.png'
+
 type IProps = {
   username: string
   onLogout: () => void
 }
 export const Sidebar = ({ username, onLogout }: IProps) => {
   const navigate = useNavigate()
+
   return (
     <div className="h-screen w-[260px] bg-gradient-to-tl from-[#C0C7C7] to-[#5A6A6A] text-white flex flex-col p-4 fixed left-0">
       <h1 className="text-2xl font-bold mb-6 flex items-center border-b border-gray-400 pb-4">
@@ -51,10 +48,11 @@ export const Sidebar = ({ username, onLogout }: IProps) => {
           <ListPlus className="w-6 h-6" /> Add Language
         </Button>
 
-        <div className=" "></div>
         <DropdownMenu>
           <DropdownMenuTrigger className="bottom-0 absolute left-0 flex gap-2 shadow-xl items-center p-3 w-full justify-start bg-[#5A6A6A]">
-            <CircleUserRound className="w-6 h-6 " />
+            <Avatar className="h-10 w-10 ">
+              <AvatarImage alt="user-logo" src={UserAvatar} />
+            </Avatar>
             <span className="mt-1 text-xl font-bold ">{username}</span>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
