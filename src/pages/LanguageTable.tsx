@@ -115,7 +115,6 @@ export const LanguageTable = ({ token }: { token: string }) => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <Search className="absolute w-5 h-5 top-2 left-3 text-gray-500" />
-        <Button className="bg-white">hidden</Button>
       </div>
       <div className="border rounded-md w-full bg-white">
         <Table>
@@ -307,7 +306,7 @@ export const LanguageTable = ({ token }: { token: string }) => {
                 >
                   <img
                     src={`../../public/${lang.name.toLocaleLowerCase()}.png`}
-                    alt="logo"
+                    alt=""
                     className="h-6 w-auto"
                   />
                 </TableCell>

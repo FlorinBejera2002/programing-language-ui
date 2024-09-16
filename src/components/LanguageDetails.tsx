@@ -65,7 +65,7 @@ export const LanguageDetails = ({
   }
 
   return (
-    <section className="space-y-6 w-[500px]">
+    <section className="space-y-6 w-[800px]">
       <Card className="max-w-4xl p-6">
         <Button
           className="w-fit group mb-5 bg-black text-white"
@@ -118,7 +118,7 @@ export const LanguageDetails = ({
               type="number"
             />
           </div>
-          <div className="max-w-md">
+          <div>
             <div className="mb-2 block">
               <label className="font-semibold text-sm" htmlFor="paradigm">
                 Paradigm
@@ -146,17 +146,19 @@ export const LanguageDetails = ({
               </SelectContent>
             </Select>
           </div>
-          <div className="flex justify-end items-center gap-20 mt-5">
-            {successMessage && (
-              <div className="text-sm text-green-500">
-                <span>{successText}</span>
-              </div>
-            )}
-            {errorMessage && (
-              <div className="text-sm text-red-500">
-                <span>Failed to fetch language details</span>
-              </div>
-            )}
+          <div className="flex justify-between items-center gap-20 mt-5">
+            <div>
+              {successMessage && (
+                <div className="text-sm text-green-500">
+                  <span>{successText}</span>
+                </div>
+              )}
+              {errorMessage && (
+                <div className="text-sm text-red-500">
+                  <span>Failed to fetch language details</span>
+                </div>
+              )}
+            </div>
             <Button
               className={cn(` w-fit text-white ${buttonColor}`)}
               type="submit"
